@@ -20,8 +20,8 @@ Future signIn(final context, TextEditingController emailContoller, TextEditingCo
           child: ElevatedButton(
             onPressed: (){
             Navigator.of(context).pop();
-          }, child: Text("Okay",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.onSecondary),),
-          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.secondary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),)
+          }, child: Text("Okay",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary),),
+          style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),)
           ),
         )
       ],

@@ -2,42 +2,41 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:app4/Widgets/BottomBar.dart';
 
 class checkFav extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
-  String ro,name,image;
-  checkFav({Key? key, required this.ro,required this.name,required this.image}) : super(key: key);
+  String ro,image;
+  int PlaceType; // 0--->area | 1--->hotel
+  checkFav({Key? key, required this.ro,required this.image,required this.PlaceType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) { 
     return  StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('Favourite').where("Fav",isEqualTo: ro).where("Email",isEqualTo: user.email).snapshots(),
       builder: (context, snapshot) {
-        return Container(
-                      margin: const EdgeInsets.fromLTRB(0,10,0,0),
-                      child: SizedBox(
-                        height: 55,
-                        width: 260,
-                        child: TextButton(
+        return (snapshot.connectionState == ConnectionState.waiting) ?  Container()
+        :  Container(
+                      margin: const EdgeInsets.only(right: 15),
+                      child: IconButton(
                           onPressed: (){
                             if(snapshot.data!.docs.isEmpty)
                             {
                               FirebaseFirestore.instance.collection("Favourite").add({
                                 "Email": user.email,
-                                "Fav": name,
+                                "Fav": ro,
                                 "image": image,
-                                "type": "area",});
+                                "type": (PlaceType == 0) ? "area" : "hotel",
+                                });
 
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) =>const DefaultTabController(length: 4, child: BottomBar(select: 1,)))), (route) => false);
-                            }
-                            else
-                            {
-                                    showDialog(context: context,
+
+                            //Fluttertoast.showToast(msg: "msg",);
+                            //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) =>const DefaultTabController(length: 4, child: BottomBar(select: 1,)))), (route) => false);
+
+                           showDialog(context: context,
                                     barrierDismissible: false, 
                                     builder: (context) {
                                       return AlertDialog(
-                                      title: Text("This area already exists in the Favourite list!",style: GoogleFonts.merriweather(),),
+                                      title: Text("Adding Successful",style: GoogleFonts.merriweather(),),
                                       actions: [
                                         Center(
                                           child: ElevatedButton(
@@ -52,15 +51,19 @@ class checkFav extends StatelessWidget {
                                     );
                                     }
                                     );
+
+                            }
+                            else
+                            {
+                              DocumentReference documentReference = FirebaseFirestore.instance.collection('Favourite').doc(snapshot.data?.docs[0].id);
+                              documentReference.delete();
                             }
 
                       
-                          }, child: Text("Add to Favourites",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.onSecondary,fontSize: 18),),
-                          style: TextButton.styleFrom(backgroundColor: const Color.fromARGB(255, 220, 109, 101),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                          elevation: 10
+                          }, 
+                          icon: (snapshot.data!.docs.isEmpty) ? const Icon(Icons.favorite_border_rounded,color: Colors.red,size: 40,) 
+                          : const Icon(Icons.favorite,color: Colors.red,size: 40,),
                           ),
-                          ),
-                      ),
         );
       }
     );

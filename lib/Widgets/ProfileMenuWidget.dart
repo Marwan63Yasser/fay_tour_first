@@ -10,7 +10,7 @@ class ProfileMenuWidget extends StatelessWidget {
     this.textColor,
   }) : super(key: key);
 
-  final String title;
+  final String title; 
   final IconData icon;
   final VoidCallback onPress;
   final bool endIcon;
@@ -18,7 +18,7 @@ class ProfileMenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var iconColor = Colors.green;
+    var iconColor = Theme.of(context).colorScheme.primary;
 
     return ListTile(
       onTap: onPress,

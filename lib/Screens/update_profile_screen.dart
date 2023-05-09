@@ -1,11 +1,12 @@
 import 'dart:io';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-//import 'package:tour/screens/homepage.dart';
-import 'package:app4/Screens/profile_screen.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// class UpdateProfileScreen extends StatelessWidget {
+//import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app4/Data/UserDataTemplate.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -16,25 +17,40 @@ class UpdateProfileScreen extends StatefulWidget {
   State<UpdateProfileScreen> createState() => _UpdateProfileScreen();
 }
 
+USER temp = USER();
+
 class _UpdateProfileScreen extends State<UpdateProfileScreen> {
+  String picked__File = "";
   File? _profileImageFile;
+  String ImageUrl = "";
   bool _hasChangedProfileImage = false;
   late String _profileImagePath;
+
+  UploadTask? uploadTask;
+
+  final user = FirebaseAuth.instance.currentUser!;
+
+  final form = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Student').where("Email",isEqualTo: user.email).snapshots(),
+      builder:((context, snapshot) {
+        return (snapshot.connectionState == ConnectionState.waiting)
+                ? Container()
+                : Scaffold(
+     backgroundColor: Theme.of(context).colorScheme.onSecondary,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-           Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
+        title:  Row(
+          children: [
+            const Icon(Icons.edit),
+            const SizedBox(width: 10,),
+            Text("Edit Profile",style: GoogleFonts.acme(fontSize: 23),),
+          ],
         ),
-        title: const Text("Edit Profile",
-            style: TextStyle(fontSize: 25, color: Colors.black)),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -52,8 +68,19 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                         borderRadius: BorderRadius.circular(100),
                         child: _profileImageFile != null
                             ? Image.file(_profileImageFile!, fit: BoxFit.cover)
-                            : Image.asset('images/kkk.jpg',
-                                fit: BoxFit.cover),
+                            : (snapshot.data?.docs[0]["image"] != "") ? Image.network(snapshot.data?.docs[0]["image"],
+                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset("images/error1.gif");
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if(loadingProgress != null) 
+                          {
+                            return Image.asset("images/loading1.gif");
+                          }
+                          return child;
+                        },
+                        ) : Image.asset('images/zzz.png',fit: BoxFit.cover,),
                       ),
                     ),
                     Positioned(
@@ -64,11 +91,11 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                         height: 35,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: Colors.green),
+                            color: Theme.of(context).colorScheme.primary),
                         child: InkWell(
-                          child: const Icon(
+                          child:  Icon(
                             Icons.edit,
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.secondary,
                             size: 20,
                           ),
                           onTap: _showImagePicker,
@@ -82,24 +109,76 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
 
               // -- Form Fields
               Form(
+                key: form,
                 child: Column(
                   children: [
                     TextFormField(
                       decoration: const InputDecoration(
-                          label: Text("Full Name"),
+                          label: Text("First Name"),
                           prefixIcon: Icon(Icons.person)),
+                          validator: (value) {
+                            if(value == "")
+                {
+                  return "please enter name";//
+                }
+                else
+                {return null;}
+                          },
+                    onSaved: (newValue) {
+                      temp.FirstName = newValue!; 
+                    },
                     ),
                     const SizedBox(height: 30),
                     TextFormField(
                       decoration: const InputDecoration(
-                          label: Text("Email"), prefixIcon: Icon(Icons.email)),
+                          label: Text("Last Name"),
+                          prefixIcon: Icon(Icons.person)),
+                          validator: (value) {
+                            if(value == "")
+                {
+                  return "please enter name";//
+                }
+                else
+                {return null;}
+                          },
+                      onSaved: (newValue) {
+                      temp.LastName = newValue!; 
+                    },
                     ),
                     const SizedBox(height: 30),
                     TextFormField(
                       decoration: const InputDecoration(
                           label: Text("Phone Number"),
                           prefixIcon: Icon(Icons.phone)),
+                          validator: (value) {
+                            if(int.tryParse(value!) == null)
+                {
+                  return "please enter a valid number";
+                }
+                else
+                {return null;}
+                          },
+                          onSaved: (newValue) {
+                      temp.Mobile = newValue!; 
+                    },
                     ),
+                //     const SizedBox(height: 30),
+                //     TextFormField(
+                //       decoration: const InputDecoration(
+                //           label: Text("Email"),
+                //           prefixIcon: Icon(Icons.email)),
+                //           validator: (value) {
+                //             if(!EmailValidator.validate(value!))
+                // {
+                //   return "please enter a valid email";
+                // }
+                // else
+                // {return null;}
+                //           },
+                //           onSaved: (newValue) {
+                //       temp.Email = newValue!; 
+                //     },
+                //     ),
                     const SizedBox(height: 30),
                     TextFormField(
                       obscureText: true,
@@ -110,6 +189,17 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                             icon: const Icon(Icons.remove_red_eye),
                             onPressed: () {}),
                       ),
+                      validator: (value) {
+                        if( value!.length < 6 )
+                {
+                  return "please enter at least 6 charcters";
+                }
+                else
+                {return null;}
+                      },
+                    onSaved: (newValue) {
+                      temp.Password = newValue!; 
+                    },
                     ),
                     const SizedBox(height: 50),
 
@@ -117,17 +207,79 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+
+                          final isValid = form.currentState!.validate();
+                          if(!isValid) return;
+
+                          form.currentState?.save();
+
+                          Reference referenceRoot = FirebaseStorage.instance.ref();
+                          Reference referenceDirImages = referenceRoot.child('User_images');
+                          String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+                          Reference referenceImageToUpload = referenceDirImages.child(uniqueName);
+
+                          try{
+                            setState(() {
+                              uploadTask = referenceImageToUpload.putFile(File(picked__File));
+                            });
+                            
+                            final snapshot =  await uploadTask!.whenComplete(() {}); 
+                            
+                            ImageUrl = await snapshot.ref.getDownloadURL();
+
+                            setState(() {
+                              uploadTask = null;
+                            });
+
+                          }catch(error){
+                            print(error);
+                          }
+
+                          
+                          FirebaseAuth.instance.currentUser!.updatePassword(temp.Password);
+                          //FirebaseAuth.instance.currentUser!.updateEmail(temp.Email);
+
+                          if(ImageUrl != "")
+                          {
+                            
+                            FirebaseFirestore.instance.collection("Student").doc(snapshot.data?.docs[0]["iid"]).update(
+                            {
+                              'FirstName': temp.FirstName,
+                              'LastName': temp.LastName,
+                              'Mobile': temp.Mobile,
+                              'Password': temp.Password,
+                              'image': ImageUrl
+                            }
+                          );
+                          }
+                          else
+                          {
+                            FirebaseFirestore.instance.collection("Student").doc(snapshot.data?.docs[0]["iid"]).update(
+                            {
+                              'FirstName': temp.FirstName,
+                              'LastName': temp.LastName,
+                              'Mobile': temp.Mobile,
+                              'Password': temp.Password
+                            }
+                          );
+                          }
+                           
+
+                        Navigator.pop(context);
+                          
+                        },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             side: BorderSide.none,
                             shape: const StadiumBorder()),
-                        child: const Text("Edit Profile",
-                            style: TextStyle(color: Colors.black)),
+                        child:  Text("Edit Profile",
+                            style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary)),
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 15),
 
+                    _profileImageFile != null ? BuildProcess() : Container(),
                     // -- Created Date and Delete Button
                   ],
                 ),
@@ -136,6 +288,8 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
           ),
         ),
       ),
+    );
+      }),
     );
   }
 
@@ -173,8 +327,45 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
     if (pickedFile != null) {
       setState(() {
         _profileImageFile = File(pickedFile.path);
+        picked__File = pickedFile.path;
         _hasChangedProfileImage = true;
       });
     }
   }
+
+  Widget BuildProcess() => StreamBuilder<TaskSnapshot>(
+    stream: uploadTask?.snapshotEvents,
+    builder:(context, snapshot) {
+      if(snapshot.hasData)
+      {
+        final data = snapshot.data!;
+        double progress = data.bytesTransferred / data.totalBytes;
+        return SizedBox(
+          height: 35,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              LinearProgressIndicator(
+                value: progress,
+                backgroundColor: Colors.grey,
+                color: Colors.green,
+              ),
+              Center(
+                child: Text(
+                  'Loading:${(100*progress).roundToDouble()}%',
+                  style:  TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+      else
+      {
+        return Container();
+      }
+    },
+  );
+
 }
+

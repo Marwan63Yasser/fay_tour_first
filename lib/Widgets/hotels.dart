@@ -16,9 +16,8 @@ class HOTELS extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('hotels').where("area",isEqualTo: area_name).snapshots(),
       builder: ((context, snapshot) {
         return (snapshot.connectionState == ConnectionState.waiting)
-                ? const Center(child: CircularProgressIndicator())
-                : Container(
-                  child: SingleChildScrollView(
+                ? Container()
+                : SingleChildScrollView(
                     child: Column(
                       children: [
                         SizedBox( 
@@ -36,7 +35,7 @@ class HOTELS extends StatelessWidget {
                                   width: 200,
                                   margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(context).colorScheme.onTertiary,
+                                    color: Theme.of(context).colorScheme.secondary,
                                     borderRadius: BorderRadius.circular(10),
                                     boxShadow:  const [
                                     BoxShadow(
@@ -53,7 +52,17 @@ class HOTELS extends StatelessWidget {
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.circular(10),
                                             child: Image.network(snapshot.data?.docs[index]["image"],
-                                            fit: BoxFit.fill,
+                                             fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                                            },
+                                            loadingBuilder: (context, child, loadingProgress) {
+                                              if(loadingProgress != null) 
+                                              {
+                                                return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
+                                              }
+                                              return child;
+                                            },
                                             )),
                                         ),
                                         Container(
@@ -61,7 +70,7 @@ class HOTELS extends StatelessWidget {
                                           child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Expanded(child: Text(snapshot.data?.docs[index]["name"]+"",overflow: TextOverflow.ellipsis,maxLines: 2,style: GoogleFonts.alice(color: Colors.black,fontSize: 17,fontWeight: FontWeight.bold))),
+                                                  Expanded(child: Text(snapshot.data?.docs[index]["name"]+"",overflow: TextOverflow.ellipsis,maxLines: 2,style: GoogleFonts.alice(fontSize: 16,fontWeight: FontWeight.bold))),
                                                   const RatingBar(rating: 4, ratingCount: 25),
                                                 ],
                                               ),
@@ -76,8 +85,7 @@ class HOTELS extends StatelessWidget {
                         )
                       ],
                     )
-                  ),
-                );
+                  );
       }),
     );
   }

@@ -75,7 +75,7 @@ class _homeState extends State<home> {
                 else if(snapshot.hasData)
                 {
                   
-                  return const DefaultTabController(length: 3, child: BottomBar(select:0),);
+                  return const DefaultTabController(length: 3, child: BottomBar(select:2),);
                 }
                 else
                 {
@@ -106,7 +106,8 @@ class _ChangeThemeState extends State<ChangeTheme> {
   @override
   Widget build(BuildContext context) {
     return LiteRollingSwitch(
-      animationDuration: const Duration(microseconds: 0),
+      textSize: 13,
+      animationDuration: const Duration(microseconds: 100),
       value: _themeManager.themeMode == ThemeMode.dark, 
       textOff: "Light",
       textOn: "Dark",

@@ -1,16 +1,24 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 //import 'package:tour/screens/homepage.dart';
 import 'package:app4/Screens/update_profile_screen.dart';
+import 'package:app4/Screens/settings.dart';
 import 'package:app4/Widgets/ProfileMenuWidget.dart';
-import 'package:app4/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class profile_screen extends StatelessWidget {
-  const profile_screen({Key? key}) : super(key: key);
+  profile_screen({Key? key}) : super(key: key);
+
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
-    bool isDark = true;
-    return SingleChildScrollView(
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Student').where("Email",isEqualTo: user.email).snapshots(),
+      builder: ((context, snapshot) {
+        return (snapshot.connectionState == ConnectionState.waiting)
+                ? Container()
+                : SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(30),
           child: Column(
@@ -22,17 +30,27 @@ class profile_screen extends StatelessWidget {
                     height: 120,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                          image: AssetImage('images/zzz.png'),
-                          fit: BoxFit.cover,
-                        )),
+                        child: (snapshot.data?.docs[0]["image"] != "") ? Image.network(snapshot.data?.docs[0]["image"],
+                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if(loadingProgress != null) 
+                          {
+                            return Image.asset("images/loading1.gif",fit: BoxFit.cover,);
+                          }
+                          return child;
+                        },
+                        ) : Image.asset('images/zzz.png',fit: BoxFit.cover,),  
+                        ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
-              const Text("hamada"),
+              Text("Hi, ""${snapshot.data?.docs[0]["FirstName"]} ${snapshot.data?.docs[0]["LastName"]}",style: GoogleFonts.aBeeZee()),
               const SizedBox(height: 10),
-              const Text("hm2456@fayoum.edu.eg"),
+              Text(snapshot.data?.docs[0]["Email"],style: GoogleFonts.aBeeZee()),
               const SizedBox(height: 20),
               SizedBox(
                 width: 200,
@@ -45,20 +63,24 @@ class profile_screen extends StatelessWidget {
                         ));
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       side: BorderSide.none,
                       shape: const StadiumBorder()),
-                  child: const Text(("Edit profile"),
-                      style: TextStyle(color: Colors.black)),
+                  child:  Text(("Edit profile"),
+                      style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary)),
                 ),
               ),
-              const SizedBox(height: 30),
-
-              const ChangeTheme(),
+              const SizedBox(height: 20),
                             const Divider(),
               const SizedBox(height: 10),
               ProfileMenuWidget(
-                  title: "Settings", icon: Icons.settings, onPress: () {}),
+                  title: "Settings", icon: Icons.settings, onPress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>  const SSSettings()
+                        ));
+                  }),
               ProfileMenuWidget(
                   title: "Billing Details", icon: Icons.wallet, onPress: () {}),
               ProfileMenuWidget(
@@ -75,31 +97,12 @@ class profile_screen extends StatelessWidget {
                   icon: Icons.login_outlined,
                   textColor: Colors.red,
                   endIcon: false,
-                  onPress: () {
-                    showDialog(
-                      builder: (context) => AlertDialog(
-                        title: const Text('Do you want to exit this application?'),
-                        content: const Text('We hate to see you leave...'),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {
-                              print("you choose no");
-                              Navigator.of(context).pop(false);
-                            },
-                            child: const Text('No'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Yes'),
-                          ),
-                        ],
-                      ),
-                      context: context,
-                    );
-                  }),
+                  onPress: () {FirebaseAuth.instance.signOut();}),
             ],
           ),
         ),
       );
+      }),
+    );
   }
 }

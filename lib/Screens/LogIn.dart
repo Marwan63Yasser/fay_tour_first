@@ -43,7 +43,7 @@ class _LOGState extends State<LOG> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      backgroundColor: Theme.of(context).colorScheme.onSecondary,
       body: 
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -74,9 +74,9 @@ class _LOGState extends State<LOG> {
                           child: TextButton(
                             onPressed: (){
                               saveForm();
-                            }, child: Text("Sign In",style: GoogleFonts.rye(fontSize: 16,color: Theme.of(context).colorScheme.onSecondary),),
+                            }, child: Text("Sign In",style: GoogleFonts.rye(fontSize: 16,color: Theme.of(context).colorScheme.secondary),),
                             style: TextButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                            backgroundColor: Theme.of(context).colorScheme.secondary,
+                            backgroundColor: Theme.of(context).colorScheme.primary,
                             ),
                             ),
                         ),
@@ -95,7 +95,7 @@ class _LOGState extends State<LOG> {
                                   TextSpan(
                                     recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
                                     text: 'Register Now',
-                                    style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.secondary),
+                                    style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.primary),
                                   ),
                                 ],
                                 style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.onPrimary),

@@ -1,16 +1,22 @@
 //This file is for viewing the details of the area if you click its card on
 //the explore page 
-import 'package:app4/Data/CheckFavorite.dart';
 import 'package:app4/Widgets/hotels.dart';
-import 'package:app4/Screens/Trip.dart';
+import 'package:app4/Screens/Gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:app4/Widgets/RatingStarsBar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:app4/Widgets/RatingStarsBar.dart';
+
 
 class Desc extends StatelessWidget {
   String ro;
   Desc({Key? key, required this.ro}) : super(key: key);
+
+  final urlImages = [
+    'images/e1.jpg',
+    'images/e2.jpg',
+    'images/e3.jpg'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +26,12 @@ class Desc extends StatelessWidget {
         return (snapshot.connectionState == ConnectionState.waiting) ? const CircularProgressIndicator()
         : Container(
                   height: MediaQuery.of(context).size.height/1.49,
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                  padding: const EdgeInsets.only(top: 20, left: 0, right: 0),
                   decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
+                  color: Theme.of(context).colorScheme.secondary,
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
                   )),
                     child: ListView(
                      children: [
@@ -35,28 +41,152 @@ class Desc extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             //GetData(collection: "Area", isSearch: true,type: 1,SearchKey1: widget.ro,SearchKey2: "name",),
-                            Align(
-          alignment: Alignment.center,
-          child: Container(child: Text(snapshot.data?.docs[0]["name"],
-          style: GoogleFonts.acme(fontSize: 22,color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.bold),),margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),)
-      ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Container(child: Text(snapshot.data?.docs[0]["name"],
+                                  style: GoogleFonts.acme(fontSize: 22,color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.bold
+                                  ),
+                                  overflow: TextOverflow.ellipsis,maxLines: 2,
+                                  ),
+                                  margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+                                  ),
+                                ),
+ 
+                                Row(
+                                  children: [
+                                    Text('${snapshot.data?.docs[0]["rate"]}',style: const TextStyle(fontWeight: FontWeight.bold),),
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 15),
+                                      child: RatingBar(rating: snapshot.data?.docs[0]["rate"],size: 22,)
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+      
         Align(
           alignment: Alignment.center,
           child: Container(child: Text(snapshot.data?.docs[0]["desc"],
-          style: GoogleFonts.merriweather(fontSize: 18,color: Theme.of(context).colorScheme.onPrimary),),margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),)
+          style: GoogleFonts.merriweather(fontSize: 13,color: Theme.of(context).colorScheme.onPrimary),),margin: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),)
       ),
-      Align(
-        alignment: Alignment.center,
-        child: Container(child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //Text("Rate: ",style: GoogleFonts.rye(fontSize: 20,fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),),
-          RatingBar(rating: snapshot.data?.docs[0]["rate"], ratingCount: 25,size: 22,),
-          ],
-        ),
-        margin: const EdgeInsets.all(10),)
-        ),
+
+                      const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    margin: const EdgeInsets.only(left: 15),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child: InkWell(
+                                onTap:() =>  Navigator.push(context,MaterialPageRoute(builder: (context) => GalleryWidget(urlImages: snapshot.data?.docs[0]["images"],index: 0) ) ),
+                                child: SizedBox(
+                                width: MediaQuery.of(context).size.width*0.30,
+                                height: MediaQuery.of(context).size.width*0.3,
+                                  child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                  snapshot.data?.docs[0]["images"][0],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                                  },
+                                  loadingBuilder: (context, child, loadingProgress) {
+                                    if(loadingProgress != null) 
+                                    {
+                                      return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
+                                    }
+                                    return child;
+                                  },
+                                  ),
+                                  ),
+                                ),
+                              )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child:InkWell(
+                                onTap:() =>  Navigator.push(context,MaterialPageRoute(builder: (context) => GalleryWidget(urlImages: snapshot.data?.docs[0]["images"],index: 1) ) ),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width*0.30,
+                                height: MediaQuery.of(context).size.width*0.3,
+                                  child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                  snapshot.data?.docs[0]["images"][1],
+                                                               fit: BoxFit.cover,
+                                                              errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                                                              },
+                                                              loadingBuilder: (context, child, loadingProgress) {
+                                  if(loadingProgress != null) 
+                                  {
+                                    return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
+                                  }
+                                  return child;
+                                },
+                                                              
+                                ),
+                                ),
+                                ),
+                              )
+                        ),
+
+                                                Padding(
+                          padding: const EdgeInsets.only(right: 5),
+                          child:InkWell(
+                                onTap:() =>  Navigator.push(context,MaterialPageRoute(builder: (context) => GalleryWidget(urlImages: snapshot.data?.docs[0]["images"],index: 2) ) ),
+                                child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Opacity(
+                                        opacity: 0.6,
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context).size.width*0.30,
+                                                                      height: MediaQuery.of(context).size.width*0.3,
+                                          child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(15),
+                                          child: Image.network(
+                                          snapshot.data?.docs[0]["images"][2],
+                                                                       fit: BoxFit.cover,
+                                                                      errorBuilder: (context, error, stackTrace) {
+                                          return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                                                                      },
+                                                                      loadingBuilder: (context, child, loadingProgress) {
+                                          if(loadingProgress != null) 
+                                          {
+                                            return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
+                                          }
+                                          return child;
+                                          },
+                                                                      
+                                           ),
+                                          ),
+                                        ),
+                                      ),
+                                    Text(
+                                "+${snapshot.data?.docs[0]["images"].length - 2}",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                                    ],
+                                  ),
+                                
+                              )
+                        ),
+
+                      ],
+                    ),
+                  ),
+                const SizedBox(
+                  height: 10,
+                ),
+
                                 Container(
                                 margin: const EdgeInsets.fromLTRB(0,25,0,10),
                                 child: SizedBox(
@@ -64,7 +194,10 @@ class Desc extends StatelessWidget {
                                   width: 260,
                                   child: TextButton(
                                     onPressed: (){
-                                      Navigator.push(context,MaterialPageRoute(builder: ((context) => TRIP(ro: snapshot.data?.docs[0]["name"]))));
+                                      // Navigator.push(context,MaterialPageRoute(builder: ((context) => MyHomePage(title: "Go To "+snapshot.data?.docs[0]["name"]+"...",
+                                      // destinationLatitude: 29.331028081862264,
+                                      // destinationLongitude: 30.841983847540963,
+                                      // ))));
                                     },
                                     child: Text("Go to it!",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary,fontSize: 18),),
                                     style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -74,19 +207,17 @@ class Desc extends StatelessWidget {
                                 ),
                               ),
 
-                              Align(
-                                  alignment: Alignment.center,
-                                  child: Container(child: Text("OR",style: GoogleFonts.merriweather(fontSize: 17,fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),),margin: const EdgeInsets.all(10),)
-                                  ),
-                                
-                                checkFav(ro: ro, name: snapshot.data?.docs[0]["name"], image: snapshot.data?.docs[0]["image"]),
-
                                 Align(
-                                  alignment: Alignment.center,
-                                  child: Container(child: Text("The Near Hotels: ",style: GoogleFonts.rye(fontSize: 20,fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.secondary),),margin: const EdgeInsets.all(20),)),
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(child: Text("The Near Hotels: ",style: GoogleFonts.acme(fontSize: 22,fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),),margin: const EdgeInsets.all(20),)
+                                  ),
                         
+                        
+
                         HOTELS(area_name: snapshot.data?.docs[0]["name"]),
 
+
+                        const SizedBox(height: 15,),
                         ],
                         
                         ),
@@ -98,8 +229,6 @@ class Desc extends StatelessWidget {
       }),
     );
   }
+
 }
 
-
-
- 

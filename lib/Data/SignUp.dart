@@ -22,9 +22,14 @@ Future signUp(final context,final formKey, TextEditingController emailContoller,
         "LastName": temp.LastName,
         "Mobile": temp.Mobile,
         "Email": temp.Email,
-        "Password": temp.Password
+        "Password": temp.Password,
+        "image": ""
+    }).then((DocumentReference doc) {
+      FirebaseFirestore.instance.collection("Student").doc(doc.id).update({
+      "iid": doc.id,
     });
-    
+    });
+  
   }on FirebaseAuthException catch (m){
     showDialog(context: context,
   barrierDismissible: false, 
@@ -37,7 +42,7 @@ Future signUp(final context,final formKey, TextEditingController emailContoller,
           onPressed: (){
           Navigator.of(context).pop();
         }, child: Text("Okay",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.onSecondary),),
-        style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.secondary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),)
+        style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),)
         ),
       )
     ],

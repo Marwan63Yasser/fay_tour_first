@@ -32,6 +32,7 @@ class _regState extends State<reg> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.onSecondary,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18),  
         child: SafeArea(
@@ -59,8 +60,8 @@ class _regState extends State<reg> {
                     child: TextButton(
                       onPressed: (){
                         signUp(context, form, emailContoller, passwordContoller, temp);
-                      }, child: Text("Register",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.onSecondary,fontSize: 14),),
-                      style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.secondary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
+                      }, child: Text("Register",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary,fontSize: 14),),
+                      style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
                       ),
                       ),
                   ),
@@ -76,7 +77,7 @@ class _regState extends State<reg> {
                                 TextSpan(
                                   recognizer: TapGestureRecognizer()..onTap = widget.onClickedSignUp,
                                   text: 'Log In',
-                                  style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.secondary),
+                                  style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.primary),
                                 )
                               ],
                               style: GoogleFonts.merriweather(color: Theme.of(context).colorScheme.onPrimary),
