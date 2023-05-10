@@ -18,9 +18,9 @@ class _ZoomableImageState extends State<ZoomableImage> {
     super.initState();
     _images = [
       const AssetImage('images/plan1.jpeg'),
+      const AssetImage('images/plan2.jpeg'),
       const AssetImage('images/plan1.jpeg'),
-      const AssetImage('images/plan1.jpeg'),
-      const AssetImage('images/plan1.jpeg'),
+      const AssetImage('images/plan2.jpeg'),
     ];
   }
 

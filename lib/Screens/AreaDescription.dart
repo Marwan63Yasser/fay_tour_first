@@ -23,7 +23,7 @@ class Desc extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("Areas").where("name",isEqualTo: ro).snapshots(),
       builder: ((context, snapshot) {
-        return (snapshot.connectionState == ConnectionState.waiting) ? const CircularProgressIndicator()
+        return (snapshot.connectionState == ConnectionState.waiting) ?  Container()
         : Container(
                   height: MediaQuery.of(context).size.height/1.49,
                   padding: const EdgeInsets.only(top: 20, left: 0, right: 0),

@@ -17,7 +17,7 @@ class HOTELS extends StatelessWidget {
       builder: ((context, snapshot) {
         return (snapshot.connectionState == ConnectionState.waiting)
                 ? Container()
-                : SingleChildScrollView(
+                : SingleChildScrollView( 
                     child: Column(
                       children: [
                         SizedBox( 
@@ -66,12 +66,17 @@ class HOTELS extends StatelessWidget {
                                             )),
                                         ),
                                         Container(
-                                          margin: const EdgeInsets.fromLTRB(15, 10, 0, 5),
+                                          margin: const EdgeInsets.fromLTRB(5, 10, 5, 5),
                                           child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Expanded(child: Text(snapshot.data?.docs[index]["name"]+"",overflow: TextOverflow.ellipsis,maxLines: 2,style: GoogleFonts.alice(fontSize: 16,fontWeight: FontWeight.bold))),
-                                                  const RatingBar(rating: 4, ratingCount: 25),
+                                                  Row(
+                                                    children: [
+                                                      Text("${snapshot.data?.docs[index]["rate"]}",style: const TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
+                                                      RatingBar(rating: snapshot.data?.docs[index]["rate"], ratingCount: 0),
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                         ),

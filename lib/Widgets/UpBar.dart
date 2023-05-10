@@ -21,18 +21,19 @@ class BAR extends StatelessWidget {
                   height: MediaQuery.of(context).size.height/3,
                   width: MediaQuery.of(context).size.width,
                   child: Image.network(img,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset("images/error1.gif",fit: BoxFit.cover,);
-                  },
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if(loadingProgress != null) 
-                    {
-                      return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
-                    }
-                    return child;
-                  },
-                  ),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset("images/error1.gif",fit: BoxFit.cover,);
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if(loadingProgress != null) 
+                      {
+                        return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
+                      }
+                      return child;
+                    },
+                    ),
+                  
                 ),
                 AppBar(
                 backgroundColor: Colors.transparent,elevation: 0,

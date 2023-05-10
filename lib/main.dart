@@ -2,13 +2,19 @@ import 'package:app4/Theme/ThemeConstants.dart';
 import 'package:app4/Theme/ThemeManager.dart';
 import 'package:app4/Widgets/Auth.dart';
 import 'package:app4/Widgets/BottomBar.dart';
-import 'package:app4/Widgets/loader.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter/services.dart';
 
 void main()  {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const home());
 } 
 
@@ -53,7 +59,11 @@ class _homeState extends State<home> {
       theme: LightMode,
       darkTheme: DarkMode,
       themeMode: _themeManager.themeMode,
-      home: FutureBuilder(
+      home: AnimatedSplashScreen(
+        splashTransition: SplashTransition.scaleTransition,
+        splashIconSize: 250,
+        splash: Center(child: Image.asset("images/aaa.png"),),
+        nextScreen: FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, db) 
         {
@@ -64,7 +74,7 @@ class _homeState extends State<home> {
               builder: ((context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting)
                 {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Colors.green,));
                 }
                 else if(snapshot.hasError)
                 {
@@ -85,10 +95,11 @@ class _homeState extends State<home> {
           }
           else
           {
-            return Load(color: Colors.black);
+            return const Center(child: CircularProgressIndicator(color: Colors.green,),);
           }
           
         },
+      ),
       ),
     );
   }

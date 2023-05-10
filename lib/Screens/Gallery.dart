@@ -42,9 +42,9 @@ class _GalleryWidgetState extends State<GalleryWidget> {
               width: MediaQuery.of(context).size.width,
               child: Container(
                 
-                margin:  EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.height*0.05,7,0),
+                margin:  EdgeInsets.fromLTRB(7,MediaQuery.of(context).size.height*0.05,7,0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     FloatingActionButton(
                             onPressed: () {Navigator.pop(context);},
@@ -52,9 +52,6 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                             backgroundColor: Theme.of(context).colorScheme.secondary,
                             foregroundColor: Theme.of(context).colorScheme.primary,
                             ),
-                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.35,
-                          ),
                           Container(
                           height: 50,
                           width: 150,
@@ -71,7 +68,7 @@ class _GalleryWidgetState extends State<GalleryWidget> {
                            
                             child: Center(
                               child: Text(
-                                                "Image: ${index + 1}/${widget.urlImages.length}",
+                                                "Photo: ${index + 1}/${widget.urlImages.length}",
                                                 style:  GoogleFonts.aclonica(color:Theme.of(context).colorScheme.primary,fontSize: 20),
                                                 ),
                             )),

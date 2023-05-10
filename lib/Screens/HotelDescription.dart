@@ -20,7 +20,7 @@ import 'package:app4/Widgets/RatingStarsBar.dart';
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("hotels").where("name",isEqualTo: ro).snapshots(),
       builder: ((context, snapshot) {
-        return  (snapshot.connectionState == ConnectionState.waiting) ? const CircularProgressIndicator()
+        return  (snapshot.connectionState == ConnectionState.waiting) ? Container()
         : Container(
       height: MediaQuery.of(context).size.height/1.49,
                   padding: const EdgeInsets.only(top: 20, left: 0, right: 0),
@@ -41,7 +41,7 @@ import 'package:app4/Widgets/RatingStarsBar.dart';
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Container(child: Text(snapshot.data?.docs[0]["name"],
+                                  child: Container(child: Text(snapshot.data?.docs[0]["name"]+" Hotel",
                                   style: GoogleFonts.acme(fontSize: 22,color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,maxLines: 2,
                                   ),

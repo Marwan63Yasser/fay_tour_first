@@ -216,8 +216,8 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
 
                           Reference referenceRoot = FirebaseStorage.instance.ref();
                           Reference referenceDirImages = referenceRoot.child('User_images');
-                          String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
-                          Reference referenceImageToUpload = referenceDirImages.child(uniqueName);
+                          //String uniqueName = DateTime.now().millisecondsSinceEpoch.toString();
+                          Reference referenceImageToUpload = referenceDirImages.child(user.email!);
 
                           try{
                             setState(() {
@@ -266,6 +266,7 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                           }
                            
 
+
                         Navigator.pop(context);
                           
                         },
@@ -278,6 +279,8 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
+
+
 
                     _profileImageFile != null ? BuildProcess() : Container(),
                     // -- Created Date and Delete Button

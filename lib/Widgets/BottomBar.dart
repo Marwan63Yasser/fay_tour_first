@@ -1,5 +1,5 @@
 //Bottom bar file --> browse the main pages
-import 'package:app4/Screens/Reservation.dart';
+import 'package:app4/Screens/Plans.dart';
 import 'package:app4/Screens/profile_screen.dart';
 import 'package:app4/Screens/Favourites.dart';
 import 'package:app4/Screens/AreasList.dart';
@@ -38,15 +38,16 @@ class _BottomBarState extends State<BottomBar> {
             centerTitle: true,
             leading: selected == 2 ? Container(
                 margin: const EdgeInsets.only(left: 8),
-                child: Image.asset("images/aaa.png",
-
+                child: Hero(
+                  child: Image.asset("images/aaa.png",
+                
+                  ),
+                tag: "logo",
                 ),
                 )
              : null,
             actions: selected == 2 ? [
-              InkWell(
-              onTap: (){},
-              child: Container(
+              Container(
                 margin: const EdgeInsets.fromLTRB(0, 5, 8, 5),
                 padding: const EdgeInsets.all(10),
                 decoration:  BoxDecoration(
@@ -59,13 +60,16 @@ class _BottomBarState extends State<BottomBar> {
                   ],
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: const Icon(
-                  Icons.search,
-                  size: 26,
+                child: InkWell(
+                  onTap: () {
+                    
+                  },
+                  child: const Icon(
+                    Icons.search,
+                    size: 26,
+                  ),
                 ),
-              )
-
-          ),
+              ),
             ] : null,
             ),
           body: Screens[selected],
