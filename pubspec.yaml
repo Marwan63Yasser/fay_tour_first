@@ -52,6 +52,7 @@ dependencies:
   flutter_spinkit:
   email_validator:
   animated_splash_screen:
+  video_player:
 
 dev_dependencies:
   flutter_test:

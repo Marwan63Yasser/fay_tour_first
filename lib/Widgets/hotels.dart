@@ -50,7 +50,7 @@ class HOTELS extends StatelessWidget {
                                           height: 133,
                                           width: 300,
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
                                             child: Image.network(snapshot.data?.docs[index]["image"],
                                              fit: BoxFit.cover,
                                             errorBuilder: (context, error, stackTrace) {

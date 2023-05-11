@@ -29,6 +29,7 @@ class home extends StatefulWidget{
 
 class _homeState extends State<home> {
 
+
   @override
   void dispose()
   {
@@ -60,6 +61,7 @@ class _homeState extends State<home> {
       darkTheme: DarkMode,
       themeMode: _themeManager.themeMode,
       home: AnimatedSplashScreen(
+        animationDuration: const Duration(milliseconds: 500),
         splashTransition: SplashTransition.scaleTransition,
         splashIconSize: 250,
         splash: Center(child: Image.asset("images/aaa.png"),),
@@ -74,7 +76,7 @@ class _homeState extends State<home> {
               builder: ((context, snapshot) {
                 if(snapshot.connectionState == ConnectionState.waiting)
                 {
-                  return const Center(child: CircularProgressIndicator(color: Colors.green,));
+                  return  const Center(child: CircularProgressIndicator(color: Colors.green,));
                 }
                 else if(snapshot.hasError)
                 {
@@ -85,7 +87,7 @@ class _homeState extends State<home> {
                 else if(snapshot.hasData)
                 {
                   
-                  return const DefaultTabController(length: 3, child: BottomBar(select:2),);
+                  return const DefaultTabController(length: 3, child: BottomBar(select:1),);
                 }
                 else
                 {

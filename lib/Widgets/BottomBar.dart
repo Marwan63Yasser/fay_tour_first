@@ -16,8 +16,8 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
 
-  List<Widget> Screens = [profile_screen(), const FAV() ,const EXPLORE(), const ZoomableImage(),];
-  List<String> titles = ["My Profile", "Favourites","FayTour", "Plans"];
+  List<Widget> Screens = [profile_screen(), const EXPLORE() ,const FAV(), const ZoomableImage(),];
+  List<String> titles = ["My Profile", "FayTour","Favorites", "Plans"];
   int selected = 0;
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _BottomBarState extends State<BottomBar> {
             elevation: 0,
             //shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             centerTitle: true,
-            leading: selected == 2 ? Container(
+            leading: selected == 1 ? Container(
                 margin: const EdgeInsets.only(left: 8),
                 child: Hero(
                   child: Image.asset("images/aaa.png",
@@ -46,7 +46,7 @@ class _BottomBarState extends State<BottomBar> {
                 ),
                 )
              : null,
-            actions: selected == 2 ? [
+            actions: selected == 1 ? [
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 5, 8, 5),
                 padding: const EdgeInsets.all(10),
@@ -84,12 +84,13 @@ class _BottomBarState extends State<BottomBar> {
               Icons.person_outlined,
               size: 25,
             ),
-            Icon(
-              Icons.favorite_outline,
-              size: 25,
-            ),
+      
             Icon(
               Icons.home,
+              size: 25,
+            ),
+             Icon(
+              Icons.favorite_outline,
               size: 25,
             ),
             Icon(

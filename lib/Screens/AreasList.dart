@@ -1,5 +1,6 @@
 //This file is for (The Explore page) which contains the video and 
 //the areas cards
+
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,54 +16,63 @@ class EXPLORE extends StatefulWidget {
 
 class _EXPLOREState extends State<EXPLORE> {
 
-  final YoutubePlayerController _controller = YoutubePlayerController(initialVideoId: 'AloFpu8KyO8',flags: const YoutubePlayerFlags(
-    
+  final YoutubePlayerController _controller = YoutubePlayerController(
+    initialVideoId: 'BBHwtDhfydI',flags: const YoutubePlayerFlags(
     autoPlay: false,mute: false,showLiveFullscreenButton: false,
+    forceHD: true,
   ),
   );
-  
-  
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
         Padding(
-              padding: const EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 12),
               child: Column(
                     children: [
                     
                        // ------------------Youtube Player----------------------
                        SizedBox(
-                        height:  MediaQuery.of(context).size.height*0.235,
-                        width: MediaQuery.of(context).size.width*0.92,
-                         child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: YoutubePlayerBuilder(
-                                
+                        height:  MediaQuery.of(context).size.height*0.2608,
+                        //width: MediaQuery.of(context).size.width*0.90,
+                        child: YoutubePlayerBuilder(
+      
                                 player: YoutubePlayer(
+                                  actionsPadding: const EdgeInsets.symmetric(vertical: 8,horizontal: 15),
                                   controller: _controller,
+                                  onReady: () {
+                                    //_controller.fitHeight(Size.fromHeight(MediaQuery.of(context).size.height*0.2608));
+                                    //_controller.fitWidth(Size.fromWidth(MediaQuery.of(context).size.width));
+                                  },
+                                  onEnded: (data) {
+                                        _controller.seekTo(Duration.zero); // Stop the player when the video ends
+                                        _controller.pause();
+                                      },
+                                  showVideoProgressIndicator: true,
                                   bottomActions: [
                                     CurrentPosition(),
                                     ProgressBar(
                                       isExpanded: true,
                                       colors: const ProgressBarColors(
-                                        playedColor: Colors.green,
-                                        handleColor: Colors.lightGreen
+                                        playedColor: Color.fromARGB(255, 107, 161, 131),
+                                        handleColor: Color.fromARGB(255, 27, 70, 29)
                                       ), 
                                     ),
                                     const PlaybackSpeedButton(),
+                                    
                                   ],
                                   ),
                                 builder: (context,player){
                                   return Column(
                                     children: [
                                       player,
+                                     
                                     ],
                                   );
                                 },
                               ),
-                            ),
+                            
                        ),
                         
                         const SizedBox(height: 10,),
@@ -119,6 +129,7 @@ class _EXPLOREState extends State<EXPLORE> {
                                                   ),
                                                   child: InkWell(
                                                     onTap: () {
+                                                      _controller.pause();
                                                        Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["name"],img: snapshot.data?.docs[index]["images"][0],index: 0,)
                                                         )
                                                         );
@@ -243,6 +254,7 @@ class _EXPLOREState extends State<EXPLORE> {
                                                   ),
                                                   child: InkWell(
                                                     onTap: () {
+                                                      _controller.pause();
                                                       Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["name"],img: snapshot.data?.docs[index]["image"],index: 1,)
                                                         )
                                                         );
@@ -368,6 +380,7 @@ class _EXPLOREState extends State<EXPLORE> {
                                                   ),
                                                   child: InkWell(
                                                     onTap: () {
+                                                      _controller.pause();
                                                        Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["name"],img: snapshot.data?.docs[index]["images"][0],index: 0,)
                                                         )
                                                         );
@@ -492,6 +505,7 @@ class _EXPLOREState extends State<EXPLORE> {
                                                   ),
                                                   child: InkWell(
                                                     onTap: () {
+                                                      _controller.pause();
                                                       Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["name"],img: snapshot.data?.docs[index]["image"],index: 1,)
                                                         )
                                                         );
