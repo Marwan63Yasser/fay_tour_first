@@ -60,6 +60,7 @@ class _regState extends State<reg> {
                     child: TextButton(
                       onPressed: (){
                         signUp(context, form, emailContoller, passwordContoller, temp);
+                  
                       }, child: Text("Register",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary,fontSize: 14),),
                       style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))
                       ),

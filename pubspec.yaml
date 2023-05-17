@@ -53,7 +53,8 @@ dependencies:
   email_validator:
   animated_splash_screen:
   video_player:
-
+  url_launcher:
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

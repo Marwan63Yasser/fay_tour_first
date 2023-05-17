@@ -23,7 +23,9 @@ Future signUp(final context,final formKey, TextEditingController emailContoller,
         "Mobile": temp.Mobile,
         "Email": temp.Email,
         "Password": temp.Password,
-        "image": ""
+        "image": "",
+        "isFisrt": 1,
+        "fav":"",
     }).then((DocumentReference doc) {
       FirebaseFirestore.instance.collection("Student").doc(doc.id).update({
       "iid": doc.id,

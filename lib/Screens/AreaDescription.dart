@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app4/Widgets/RatingStarsBar.dart';
 
+import 'package:app4/Widgets/stars.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class Desc extends StatelessWidget {
   String ro;
@@ -184,8 +187,10 @@ class Desc extends StatelessWidget {
                     ),
                   ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
+
+                RatingScreen(ro: ro, PlaceType: 0),
 
                                 Container(
                                 margin: const EdgeInsets.fromLTRB(0,25,0,10),
@@ -193,11 +198,13 @@ class Desc extends StatelessWidget {
                                   height: 55,
                                   width: 260,
                                   child: TextButton(
-                                    onPressed: (){
-                                      // Navigator.push(context,MaterialPageRoute(builder: ((context) => MyHomePage(title: "Go To "+snapshot.data?.docs[0]["name"]+"...",
-                                      // destinationLatitude: 29.331028081862264,
-                                      // destinationLongitude: 30.841983847540963,
-                                      // ))));
+                                    onPressed: () async {
+                                    String  url = "https://www.google.com/maps/search/?api=1&query=${snapshot.data?.docs[0]["DestinationLatitude"]},${snapshot.data?.docs[0]["DestinationLongitude"]}";
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
                                     },
                                     child: Text("Go to it!",style: GoogleFonts.rye(color: Theme.of(context).colorScheme.secondary,fontSize: 18),),
                                     style: TextButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

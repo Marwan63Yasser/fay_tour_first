@@ -8,7 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lite_rolling_switch/lite_rolling_switch.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:app4/Screens/questions.dart';
 void main()  {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -17,6 +19,7 @@ void main()  {
   ]);
   runApp(const home());
 } 
+
 
 ThemeManager _themeManager = ThemeManager();
 
@@ -86,8 +89,16 @@ class _homeState extends State<home> {
                 } 
                 else if(snapshot.hasData)
                 {
-                  
-                  return const DefaultTabController(length: 3, child: BottomBar(select:1),);
+                  final user = FirebaseAuth.instance.currentUser!;
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection('Student').where("Email",isEqualTo: user.email).snapshots(),
+                    builder: ((context, snapshot) {
+                      return (snapshot.connectionState == ConnectionState.waiting)
+                      ? Container()
+                      : snapshot.data?.docs[0]["isFisrt"] == 1 ? TourismScreen()
+                      : const DefaultTabController(length: 3, child: BottomBar(select:1),);
+                    }),
+                  ); 
                 }
                 else
                 {
