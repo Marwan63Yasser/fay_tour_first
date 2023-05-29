@@ -33,7 +33,7 @@ class _EXPLOREState extends State<EXPLORE> {
                     children: [
                     
                        // ------------------Youtube Player----------------------
-                       SizedBox(
+                      SizedBox(
                         height:  MediaQuery.of(context).size.height*0.2608,
                         //width: MediaQuery.of(context).size.width*0.90,
                         child: YoutubePlayerBuilder(
@@ -85,7 +85,7 @@ class _EXPLOREState extends State<EXPLORE> {
                         SingleChildScrollView( 
                     child: Column(
                       children: [
-                         StreamBuilder<QuerySnapshot>(
+                        StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("Areas").snapshots(),
       builder: ((context, snapshot) {
         return (snapshot.connectionState == ConnectionState.waiting)
@@ -210,7 +210,7 @@ class _EXPLOREState extends State<EXPLORE> {
 }),
 ),
 
-StreamBuilder<QuerySnapshot>(
+                        StreamBuilder<QuerySnapshot>(
   
       stream: FirebaseFirestore.instance.collection("Areas").where("type",isEqualTo: snap.data?.docs[0]['fav']).snapshots(),
       builder: ((context, snapshot) {
@@ -336,7 +336,7 @@ StreamBuilder<QuerySnapshot>(
 }),
 ),
 
-                         StreamBuilder<QuerySnapshot>(
+                        StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("hotels").snapshots(),
       builder: ((context, snapshot) {
         return (snapshot.connectionState == ConnectionState.waiting)
@@ -468,7 +468,6 @@ StreamBuilder<QuerySnapshot>(
                       );
                         }),
                       ),
-                     
                       ],
 ),
                   

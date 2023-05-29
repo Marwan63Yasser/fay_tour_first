@@ -70,7 +70,7 @@ class _homeState extends State<home> {
         splash: Center(child: Image.asset("images/aaa.png"),),
         nextScreen: FutureBuilder(
         future: Firebase.initializeApp(),
-        builder: (context, db) 
+        builder: (context, db)
         {
           if(db.connectionState == ConnectionState.done)
           {

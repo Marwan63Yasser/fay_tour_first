@@ -224,7 +224,7 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                               uploadTask = referenceImageToUpload.putFile(File(picked__File));
                             });
                             
-                            final snapshot =  await uploadTask!.whenComplete(() {}); 
+                            final snapshot =  await uploadTask!.whenComplete(() {});
                             
                             ImageUrl = await snapshot.ref.getDownloadURL();
 
@@ -255,7 +255,7 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                           }
                           else
                           {
-                            FirebaseFirestore.instance.collection("Student").doc(snapshot.data?.docs[0]["iid"]).update(
+                            FirebaseFirestore.instance.collection("Student").doc(snapshot.data?.docs[0]["ii d"]).update(
                             {
                               'FirstName': temp.FirstName,
                               'LastName': temp.LastName,

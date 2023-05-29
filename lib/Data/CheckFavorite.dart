@@ -33,7 +33,7 @@ class checkFav extends StatelessWidget {
                             //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) =>const DefaultTabController(length: 4, child: BottomBar(select: 1,)))), (route) => false);
 
                            showDialog(context: context,
-                                    barrierDismissible: false, 
+                                    barrierDismissible: false,
                                     builder: (context) {
                                       return AlertDialog(
                                       title: Text("Adding Successful",style: GoogleFonts.merriweather(),),

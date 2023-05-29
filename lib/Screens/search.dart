@@ -1,45 +1,40 @@
-//This file is for viewing the list of the favorites of the user
-import 'package:app4/Widgets/UpBar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:app4/Widgets/UpBar.dart';
 
 
-class FAV extends StatefulWidget {
-  const FAV({Key? key}) : super(key: key);
- 
-  @override 
-  State<FAV> createState() => _FAVState();
-} 
+class SEARCH extends StatefulWidget {
+  String search_ketword;
+  int search_count;
+  SEARCH({Key? key, required this.search_ketword,required this.search_count}) : super(key: key);
 
-class _FAVState extends State<FAV> {
-  final user = FirebaseAuth.instance.currentUser!;
+  @override
+  State<SEARCH> createState() => _SEARCHState();
+}
 
+class _SEARCHState extends State<SEARCH> {
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Favourite').where("Email",isEqualTo: user.email).snapshots(),
+      stream: FirebaseFirestore.instance.collection('Areas').snapshots(),
       builder: ((context, snapshot) {
         return (snapshot.connectionState == ConnectionState.waiting)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : (snapshot.data!.docs.isEmpty)
-                ?Center(child: Text("Nothing Yet",style: GoogleFonts.pressStart2p(fontSize: 25,color: Theme.of(context).colorScheme.primary),),)
-                :ListView.builder(
+                : (widget.search_ketword == "") ? Center(child: Text("Please Write Something!",style: GoogleFonts.pressStart2p(fontSize: 13,color: Theme.of(context).colorScheme.primary),),)
+                : ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index){
-                      return InkWell(
+                      var data = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                      if(data['desc'].toString().toLowerCase().contains(widget.search_ketword.toLowerCase()))
+                      {
+                        return InkWell(
                             onTap: () {
-                              if(snapshot.data?.docs[index]["type"] == "area")
-                              {
-                              Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["Fav"],index: 0,img: snapshot.data?.docs[index]["image"])));
-                              }
-                              else
-                              {
-                                Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["Fav"],index: 1,img: snapshot.data?.docs[index]["image"])));
-                              }
+                              Navigator.push(context,MaterialPageRoute(builder: (context) => BAR(ro: snapshot.data?.docs[index]["name"],index: 0,img: snapshot.data?.docs[index]["images"][0])));
+
                             },
                             child: Container(
                               height: 200,
@@ -58,7 +53,7 @@ class _FAVState extends State<FAV> {
                                                 Colors.black,
                                                 Colors.transparent,
                                               ],
-                                              stops: [0, 0.2, 0.8, 1],
+                                              stops: [0, 0.0, 0.8, 1],
                                               ).createShader(
                                                 Rect.fromLTRB(0, 0, rect.width, rect.height)
                                               );
@@ -66,13 +61,13 @@ class _FAVState extends State<FAV> {
                                           blendMode: BlendMode.dstIn,
                                           child: ClipRRect(
                                           borderRadius: BorderRadius.circular(7),
-                                          child: Image.network(snapshot.data?.docs[index]["image"],
+                                          child: Image.network(snapshot.data?.docs[index]["images"][0],
                                           fit: BoxFit.cover,
                                           errorBuilder: (context, error, stackTrace) {
                                             return Image.asset("images/error1.gif");
                                           },
                                           loadingBuilder: (context, child, loadingProgress) {
-                                            if(loadingProgress != null) 
+                                            if(loadingProgress != null)
                                             {
                                               return Image.asset("images/loading5.gif");
                                             }
@@ -83,30 +78,10 @@ class _FAVState extends State<FAV> {
                                         ),
 
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          IconButton(onPressed: () {},
-                                          icon:  const Icon(Icons.favorite,color: Colors.red,),
-                                          ),
-                                          IconButton(onPressed: () async {
-                                  DocumentReference documentReference = FirebaseFirestore.instance.collection('Favourite').doc(snapshot.data?.docs[index].id);
-                                  await documentReference.delete();                                  
-                                },
-                                icon:  Icon(Icons.cancel,color: Theme.of(context).colorScheme.onPrimary,),
-                                ),
-                              
-                                        ],
-                                      ),
-
-                                      Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          (snapshot.data?.docs[index]["type"] == "area") 
-                                          ? Text(snapshot.data?.docs[index]["Fav"],style: GoogleFonts.merriweather(fontSize: 18,color: Theme.of(context).colorScheme.onPrimary,),overflow: TextOverflow.ellipsis,maxLines: 1,)
-                                          
-                                          : Text(snapshot.data?.docs[index]["Fav"]+" Hotel",style: GoogleFonts.merriweather(fontSize: 18,color: Theme.of(context).colorScheme.onPrimary,),overflow: TextOverflow.ellipsis,maxLines: 1,)
+                                          Text(snapshot.data?.docs[index]["name"],style: GoogleFonts.merriweather(fontSize: 18,color: Theme.of(context).colorScheme.onPrimary,),overflow: TextOverflow.ellipsis,maxLines: 1,)
                                           
                                         ],
                                       ),
@@ -120,16 +95,33 @@ class _FAVState extends State<FAV> {
                                 boxShadow: const [
                                 BoxShadow(
                                   color: Colors.grey,
-                                  blurRadius: 6, 
+                                  blurRadius: 6,
                                 ),],
                                // image: DecorationImage(image: Image.network("src")),
                               ),
                                 ),
                           );
+                      }
+                      else
+                      {
+                        if(widget.search_count == snapshot.data!.docs.length-1)
+                        {
+                          return Container(
+                            margin:  EdgeInsets.only(top: MediaQuery.of(context).size.height*0.25),
+                            child: Center(child: Text("Not Found!",style: GoogleFonts.pressStart2p(fontSize: 25,color: Theme.of(context).colorScheme.primary),),));
+                          
+                        }
+                        else
+                        {
+                          widget.search_count++;
+                          return Container();
+                        }
+                        
+                      }
                       
                     },
         );
       }),
     );
-  }
+    }
 }

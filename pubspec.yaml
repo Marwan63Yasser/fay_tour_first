@@ -54,6 +54,7 @@ dependencies:
   animated_splash_screen:
   video_player:
   url_launcher:
+  flutter_staggered_grid_view:
   
 dev_dependencies:
   flutter_test:

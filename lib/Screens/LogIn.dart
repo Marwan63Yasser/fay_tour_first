@@ -102,8 +102,7 @@ class _LOGState extends State<LOG> {
                               )
                               )
                           ),
-                      ),
-               ],
+                      ),],
                   
               ),
                   

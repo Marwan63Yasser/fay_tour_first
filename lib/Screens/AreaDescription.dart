@@ -154,19 +154,19 @@ class Desc extends StatelessWidget {
                                           borderRadius: BorderRadius.circular(15),
                                           child: Image.network(
                                           snapshot.data?.docs[0]["images"][2],
-                                                                       fit: BoxFit.cover,
+                                                                      fit: BoxFit.cover,
                                                                       errorBuilder: (context, error, stackTrace) {
                                           return Image.asset("images/error1.gif",fit: BoxFit.cover,);
                                                                       },
                                                                       loadingBuilder: (context, child, loadingProgress) {
-                                          if(loadingProgress != null) 
+                                          if(loadingProgress != null)
                                           {
                                             return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
                                           }
                                           return child;
                                           },
                                                                       
-                                           ),
+                                          ),
                                           ),
                                         ),
                                       ),

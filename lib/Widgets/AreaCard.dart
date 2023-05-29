@@ -4,86 +4,98 @@ import 'package:app4/Widgets/RatingStarsBar.dart';
 class AreaCard extends StatelessWidget {
   final snapshot;
   int index;
-  AreaCard({Key? key, required this.snapshot,required this.index}) : super(key: key);
+  AreaCard({Key? key, required this.snapshot, required this.index})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            height:  MediaQuery.of(context).size.height*0.25,
-                            width: MediaQuery.of(context).size.width*0.90,
-                            child: ClipRRect(
-                            borderRadius:  BorderRadius.circular(15),
-                            child: Image.network(snapshot.data?.docs[index]["images"][0],
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset("images/error1.gif",fit: BoxFit.cover,);
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if(loadingProgress != null) 
-                              {
-                                return Image.asset("images/loading2.gif",fit: BoxFit.cover,);
-                              }
-                              return child;
-                            },
-                            ),
-                            ),
-
-                          ),
-                          const SizedBox(
-                          height: 10,
-                        ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width*0.85,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    snapshot.data?.docs[index]["name"],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        color: Theme.of(context).colorScheme.onPrimary,),
-                                        overflow: TextOverflow.ellipsis,maxLines: 1,
-                                  ),
-                                ),
-                                // const Icon(
-                                //   Icons.more_vert,
-                                //   size: 30,
-                                // )
-                                Row(
-                                  children: [
-                                    Text('${snapshot.data?.docs[index]["rate"]}',style: const TextStyle(fontWeight: FontWeight.bold),),
-                                    RatingBar(rating: snapshot.data?.docs[index]["rate"], ratingCount: 0),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        // Row(
-                        //   children: const [
-                        //     Icon(
-                        //       Icons.star,
-                        //       size: 20,
-                        //       color: Colors.amber,
-                        //     ),
-                        //     Text(
-                        //       '4.5',
-                        //       style: TextStyle(fontWeight: FontWeight.w600),
-                        //     )
-                        //   ],
-                        // )
-                      ],
-                    ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.25,
+            width: MediaQuery.of(context).size.width * 0.90,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                snapshot.data?.docs[index]["images"][0],
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    "images/error1.gif",
+                    fit: BoxFit.cover,
                   );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) {
+                    return Image.asset(
+                      "images/loading2.gif",
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  return child;
+                },
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    snapshot.data?.docs[index]["name"],
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                // const Icon(
+                //   Icons.more_vert,
+                //   size: 30,
+                // )
+                Row(
+                  children: [
+                    Text(
+                      '${snapshot.data?.docs[index]["rate"]}',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    RatingBar(
+                        rating: snapshot.data?.docs[index]["rate"],
+                        ratingCount: 0),
+                  ],
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          // Row(
+          //   children: const [
+          //     Icon(
+          //       Icons.star,
+          //       size: 20,
+          //       color: Colors.amber,
+          //     ),
+          //     Text(
+          //       '4.5',
+          //       style: TextStyle(fontWeight: FontWeight.w600),
+          //     )
+          //   ],
+          // )
+        ],
+      ),
+    );
   }
 }
 
